@@ -1,11 +1,8 @@
-// Import Dependencies
 const express = require("express");
 const cors = require("cors");
-
 // Import JSON files
 const products = require("./products.json");
 const testimonials = require("./testimonials.json");
-
 // Create our app object
 const app = express();
 
@@ -29,8 +26,14 @@ app.get("/testimonials", (req, res) => {
   res.json(testimonials);
 });
 
-//declare a variable for our port number
+// const MONGODB_URI = 'mongodb+srv://livvstrongg:<password>@cluster0.v3h64wc.mongodb.net/?retryWrites=true&w=majority';
+// //declare a variable for our port number
 const PORT = process.env.PORT || 4000;
 
+// mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true})
+//   .then(() => app.listen(PORT, () => console.log(`Server listening on ${PORT}`)))
+//   .catch((error) => console.log(error.message));
+
+// mongoose.set('useFindAndModify', false);
 // turn on the server listener
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
