@@ -1,39 +1,134 @@
+// const express = require("express");
+// const cors = require("cors");
+// const products = require("./products.json");
+// const testimonials = require("./testimonials.json");
+
+// const app = express();
+
+// app.use(cors());
+
+// app.get("/", (req, res) => {
+//   res.send("Hello World");
+// });
+
+// app.get("/products", (req, res) => {
+
+//   res.json(products);
+// });
+
+
+// app.get("/testimonials", (req, res) => {
+
+//   res.json(testimonials);
+// });
+
+// const PORT = process.env.PORT || 4000;
+
+// app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+///////////////////////////////
+// DEPENDENCIES
+////////////////////////////////
+// get .env variables
+require("dotenv").config();
+// pull PORT from .env, give default value of 3000
+// pull MONGODB_URL from .env
+const { PORT = 4000, MONGODB_URL } = process.env;
+// import express
 const express = require("express");
-const cors = require("cors");
-// Import JSON files
-const products = require("./products.json");
-const testimonials = require("./testimonials.json");
-// Create our app object
+// create application object
 const app = express();
+// import mongoose
+const mongoose = require("mongoose");
+// import middlware
+const cors = require("cors");
+const morgan = require("morgan");
 
-// set up middleware
-app.use(cors());
+///////////////////////////////
+// DATABASE CONNECTION
+////////////////////////////////
+// Establish Connection
+mongoose.connect(MONGODB_URL);
+// Connection Events
+mongoose.connection
+  .on("open", () => console.log("Your are connected to mongoose"))
+  .on("close", () => console.log("Your are disconnected from mongoose"))
+  .on("error", (error) => console.log(error));
 
-//home route for testing our app
+///////////////////////////////
+// MODELS
+////////////////////////////////
+const ProductSchema = new mongoose.Schema({
+    name: String,
+    image: String,
+    description: String,
+    price: String,
+});
+
+const Product = mongoose.model("Product", ProductSchema);
+
+///////////////////////////////
+// MiddleWare
+////////////////////////////////
+app.use(cors()); // to prevent cors errors, open access to all origins
+app.use(morgan("dev")); // logging
+app.use(express.json()); // parse json bodies
+
+///////////////////////////////
+// ROUTES
+////////////////////////////////
+// create a test route
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("hello world");
 });
 
-// route for retrieving projects
-app.get("/products", (req, res) => {
-  // send projects via JSON
-  res.json(products);
+// PEOPLE INDEX ROUTE
+app.get("/products", async (req, res) => {
+  try {
+    // get all people
+    res.json(await Product.find({}));
+  } catch (error) {
+    //send error
+    res.status(400).json(error);
+  }
 });
 
-// route for retrieving about info
-app.get("/testimonials", (req, res) => {
-  // send projects via JSON
-  res.json(testimonials);
+// PEOPLE CREATE ROUTE
+app.post("/products", async (req, res) => {
+  try {
+    // send all people
+    res.json(await People.create(req.body));
+  } catch (error) {
+    //send error
+    res.status(400).json(error);
+  }
 });
 
-// const MONGODB_URI = 'mongodb+srv://livvstrongg:<password>@cluster0.v3h64wc.mongodb.net/?retryWrites=true&w=majority';
-// //declare a variable for our port number
-const PORT = process.env.PORT || 4000;
+// PEOPLE UPDATE ROUTE
+app.put("/products/:id", async (req, res) => {
+  try {
+    // update people by ID
+    res.json(
+      await Product.findByIdAndUpdate(req.params.id, req.body)
+    );
+  } catch (error) {
+    //send error
+    res.status(400).json(error);
+  }
+});
 
-// mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true})
-//   .then(() => app.listen(PORT, () => console.log(`Server listening on ${PORT}`)))
-//   .catch((error) => console.log(error.message));
+// PEOPLE DELETE ROUTE
+app.delete("/products/:id", async (req, res) => {
+  try {
+    // delete people by ID
+    res.json(await Product.findByIdAndRemove(req.params.id));
+  } catch (error) {
+    //send error
+    res.status(400).json(error);
+  }
+});
 
-// mongoose.set('useFindAndModify', false);
-// turn on the server listener
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+///////////////////////////////
+// LISTENER
+////////////////////////////////
+app.listen(PORT, () => console.log(`listening on PORT ${PORT}`));
