@@ -1,134 +1,86 @@
-const express = require("express");
-const cors = require("cors");
-const products = require("./products.json");
-const testimonials = require("./testimonials.json");
-
-const app = express();
-
-app.use(cors());
-
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-app.get("/products", (req, res) => {
-
-  res.json(products);
-});
-
-
-app.get("/testimonials", (req, res) => {
-
-  res.json(testimonials);
-});
-
-const PORT = process.env.PORT || 4000;
-
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-///////////////////////////////
-// DEPENDENCIES
-////////////////////////////////
-// get .env variables
-// require("dotenv").config();
-// // pull PORT from .env, give default value of 3000
-// // pull MONGODB_URL from .env
-// const { PORT = 4000, MONGODB_URL } = process.env;
-// // import express
 // const express = require("express");
-// // create application object
-// const app = express();
-// // import mongoose
-// const mongoose = require("mongoose");
-// // import middlware
 // const cors = require("cors");
-// // const morgan = require("morgan");
+// const products = require("./products.json");
+// const testimonials = require("./testimonials.json");
 
-// ///////////////////////////////
-// // DATABASE CONNECTION
-// ////////////////////////////////
-// // Establish Connection
-// mongoose.connect(MONGODB_URL);
-// // Connection Events
-// mongoose.connection
-//   .on("open", () => console.log("Your are connected to mongoose"))
-//   .on("close", () => console.log("Your are disconnected from mongoose"))
-//   .on("error", (error) => console.log(error));
+// const app = express();
 
-// ///////////////////////////////
-// // MODELS
-// ////////////////////////////////
-// const ProductSchema = new mongoose.Schema({
-//     name: String,
-//     image: String,
-//     description: String,
-//     price: String,
+// app.use(cors());
+
+// app.get("/", (req, res) => {
+//   res.send("Hello World");
 // });
 
-// const Product = mongoose.model("Product", ProductSchema);
+// app.get("/products", (req, res) => {
 
-// ///////////////////////////////
-// // MiddleWare
-// ////////////////////////////////
-// app.use(cors()); // to prevent cors errors, open access to all origins
-// // app.use(morgan("dev")); // logging
-// app.use(express.json()); // parse json bodies
+//   res.json(products);
+// });
 
-// ///////////////////////////////
-// // ROUTES
-// ////////////////////////////////
-// // create a test route
+
+// app.get("/testimonials", (req, res) => {
+
+//   res.json(testimonials);
+// });
+
+// const PORT = process.env.PORT || 4000;
+
+// app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+// const express = require("express");
+// const methodOverride = require("method-override");
+// const controllers = require("./controllers");
+// const app = express();
+// const navLinks = require("./navLinks");
+// require("./db.connection");
+
+// const { PORT = 4000, MONGODB_URL } = process.env;
+
+
+// const cors = require("cors");
+// const morgan = require("morgan");
+
+
+// app.use(methodOverride("_method"));
+// app.use(cors()); 
+// app.use(morgan("dev")); 
+// app.use(express.json()); 
+
+// app.use("/room", controllers.room);
+
 // app.get("/", (req, res) => {
 //   res.send("hello world");
 // });
 
-// // PEOPLE INDEX ROUTE
-// app.get("/products", async (req, res) => {
-//   try {
-//     // get all people
-//     res.json(await Product.find({}));
-//   } catch (error) {
-//     //send error
-//     res.status(400).json(error);
-//   }
-// });
-
-// // PEOPLE CREATE ROUTE
-// app.post("/products", async (req, res) => {
-//   try {
-//     // send all people
-//     res.json(await People.create(req.body));
-//   } catch (error) {
-//     //send error
-//     res.status(400).json(error);
-//   }
-// });
-
-// // PEOPLE UPDATE ROUTE
-// app.put("/products/:id", async (req, res) => {
-//   try {
-//     // update people by ID
-//     res.json(
-//       await Product.findByIdAndUpdate(req.params.id, req.body)
-//     );
-//   } catch (error) {
-//     //send error
-//     res.status(400).json(error);
-//   }
-// });
-
-// // PEOPLE DELETE ROUTE
-// app.delete("/products/:id", async (req, res) => {
-//   try {
-//     // delete people by ID
-//     res.json(await Product.findByIdAndRemove(req.params.id));
-//   } catch (error) {
-//     //send error
-//     res.status(400).json(error);
-//   }
-// });
-
-// ///////////////////////////////
-// // LISTENER
-// ////////////////////////////////
 // app.listen(PORT, () => console.log(`listening on PORT ${PORT}`));
+
+// youtube video code
+
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+
+require('dotenv').config();
+
+const app = express();
+const port = process.env.PORT || 4000;
+
+app.use(cors());
+app.use(express.json());
+
+const uri = processs.env.MONGODB_URI;
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
+
+const connection= mongoose.connection;
+connection.once('open', () => {
+  console.log("Mongodb database connection established successfully");
+})
+
+const productRouter = require('./routes/product');
+const testimonialsRouter = require('./routes/testimonials');
+
+app.use('/products', productRouter);
+app.use('/testimonials', testimonialsRouter);
+
+app.listen(port, () => {
+  console.log("listening on port " + port);
+});
