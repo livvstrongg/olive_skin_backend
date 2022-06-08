@@ -1,9 +1,9 @@
 const router = require('express').Router();
-let Testimonial = require('../models/testimonials.model');
+let Product = require('../models/product.model');
 
 router.route('/').get((req, res) => {
-  Testimonial.find()
-    .then(testimonials => res.json(testimonials))
+  Product.find()
+    .then(products => res.json(products))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -11,39 +11,42 @@ router.route('/add').post((req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const image = req.body.image;
+  const price = Number(req.body.image);
 
-  const newTestimonial = new Testimonial({
+  const newProduct = new Product({
     name,
     description,
     image,
+    price,
   });
 
-  newTestimonial.save()
-  .then(() => res.json('Testimony added!'))
+  newProduct.save()
+  .then(() => res.json('Product added!'))
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/:id').get((req, res) => {
-  Testimonial.findById(req.params.id)
-    .then(testimonials => res.json(testimonials))
+  Product.findById(req.params.id)
+    .then(product => res.json(product))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/:id').delete((req, res) => {
-  Testimonials.findByIdAndDelete(req.params.id)
-    .then(() => res.json('Testimonial deleted.'))
+  Product.findByIdAndDelete(req.params.id)
+    .then(() => res.json('Product deleted.'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/update/:id').post((req, res) => {
-  Testimonial.findById(req.params.id)
-    .then(testimonials => {
-      testimonials.name = req.body.name;
-      testimonials.description = req.body.description;
-      testimonials.image = req.body.image;
+  Product.findById(req.params.id)
+    .then(product => {
+      product.name = req.body.name;
+      product.description = req.body.description;
+      product.price = Number(req.body.price);
+      product.image = req.body.image;
      
-      testimonials.save()
-        .then(() => res.json('Testimony updated!'))
+      product.save()
+        .then(() => res.json('Product updated!'))
         .catch(err => res.status(400).json('Error: ' + err));
     })
     .catch(err => res.status(400).json('Error: ' + err));
