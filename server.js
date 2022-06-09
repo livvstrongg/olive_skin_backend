@@ -72,6 +72,16 @@ app.post("/product", async (req, res) => {
   }
 });
 
+app.get("/product/:id", async (req, res) => {
+    try {
+  
+      res.json(await Product.findById(req.params.id));
+    } catch (error) {
+      //send error
+      res.status(400).json(error);
+    }
+  });
+
 
 app.put("/product/:id", async (req, res) => {
   try {
