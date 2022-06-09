@@ -5,7 +5,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
-const { reviews } = require('./controllers');
+const { products } = require("")('./controllers');
 
 
 mongoose.connect(MONGODB_URL);
@@ -20,6 +20,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 
-app.use('/reviews', reviews);
+app.use('/products', products);
 
 app.listen(PORT, () => console.log(`listening on PORT ${PORT}`));
