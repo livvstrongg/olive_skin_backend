@@ -132,43 +132,24 @@ app.get("/testimonials", async (req, res) => {
     }
   });
 
-  app.post("/reviews", async (req, res) => {
-    try {
-  
-      res.json(await Reviews.create(req.body));
-    } catch (error) {
-  
-      res.status(400).json(error);
-    }
-  });
-  
-  app.get("/reviews", async (req, res) => {
-      try {
-    
-        res.json(await Reviews.findById(req.params.id));
-      } catch (error) {
-        //send error
-        res.status(400).json(error);
-      }
-    });
-  
-  
-  app.put("/reviews", async (req, res) => {
+  app.put("/testimonials", async (req, res) => {
     try {
       res.json(
-        await Reviews.findByIdAndUpdate(req.params.id, req.body)
+        await Testimonials.findByIdAndUpdate(req.params.id, req.body)
       );
     } catch (error) {
       res.status(400).json(error);
     }
   });
   
-  app.delete("/reviews", async (req, res) => {
+  app.delete("/testimonials", async (req, res) => {
     try {
-      res.json(await Reviews.findByIdAndRemove(req.params.id));
+      res.json(await Testimonials.findByIdAndRemove(req.params.id));
     } catch (error) {
       res.status(400).json(error);
     }
   });
+
+
 
 app.listen(PORT, () => console.log(`listening on PORT ${PORT}`));
