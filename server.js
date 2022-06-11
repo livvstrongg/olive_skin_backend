@@ -40,6 +40,16 @@ const TestimonialsSchema = new mongoose.Schema({
 
 const Testimonials = mongoose.model("Testimonials", TestimonialsSchema); 
 
+const ReviewsSchema = new mongoose.Schema({
+    name: String,
+    image: String,
+    rating: Number,
+},
+{
+    timestamps: true
+});
+
+const Reviews = mongoose.model("Reviews", ReviewsSchema); 
 
 app.use(cors()); 
 app.use(morgan("dev")); 
@@ -125,7 +135,7 @@ app.get("/testimonials", async (req, res) => {
   app.post("/reviews", async (req, res) => {
     try {
   
-      res.json(await Product.create(req.body));
+      res.json(await Reviews.create(req.body));
     } catch (error) {
   
       res.status(400).json(error);
@@ -135,7 +145,7 @@ app.get("/testimonials", async (req, res) => {
   app.get("/reviews", async (req, res) => {
       try {
     
-        res.json(await Product.findById(req.params.id));
+        res.json(await Reviews.findById(req.params.id));
       } catch (error) {
         //send error
         res.status(400).json(error);
@@ -146,7 +156,7 @@ app.get("/testimonials", async (req, res) => {
   app.put("/reviews", async (req, res) => {
     try {
       res.json(
-        await Product.findByIdAndUpdate(req.params.id, req.body)
+        await Reviews.findByIdAndUpdate(req.params.id, req.body)
       );
     } catch (error) {
       res.status(400).json(error);
@@ -155,7 +165,7 @@ app.get("/testimonials", async (req, res) => {
   
   app.delete("/reviews", async (req, res) => {
     try {
-      res.json(await Product.findByIdAndRemove(req.params.id));
+      res.json(await Reviews.findByIdAndRemove(req.params.id));
     } catch (error) {
       res.status(400).json(error);
     }
