@@ -122,4 +122,43 @@ app.get("/testimonials", async (req, res) => {
     }
   });
 
+  app.post("/reviews", async (req, res) => {
+    try {
+  
+      res.json(await Product.create(req.body));
+    } catch (error) {
+  
+      res.status(400).json(error);
+    }
+  });
+  
+  app.get("/reviews", async (req, res) => {
+      try {
+    
+        res.json(await Product.findById(req.params.id));
+      } catch (error) {
+        //send error
+        res.status(400).json(error);
+      }
+    });
+  
+  
+  app.put("/reviews", async (req, res) => {
+    try {
+      res.json(
+        await Product.findByIdAndUpdate(req.params.id, req.body)
+      );
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  });
+  
+  app.delete("/reviews", async (req, res) => {
+    try {
+      res.json(await Product.findByIdAndRemove(req.params.id));
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  });
+
 app.listen(PORT, () => console.log(`listening on PORT ${PORT}`));
