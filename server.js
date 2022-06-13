@@ -99,6 +99,27 @@ app.get("/testimonials", async (req, res) => {
     }
   });
 
+  app.get("/testimonials/:id", async (req, res) => {
+    try {
+  
+      res.json(await Testimonials.find({}));
+    } catch (error) {
+      //send error
+      res.status(400).json(error);
+    }
+  });
+  
+  
+  app.post("/testimonials/:id", async (req, res) => {
+    try {
+  
+      res.json(await Testimonials.create(req.body));
+    } catch (error) {
+  
+      res.status(400).json(error);
+    }
+  });
+
   app.put("/testimonials/:id", async (req, res) => {
     try {
       res.json(
