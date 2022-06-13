@@ -1,13 +1,9 @@
 require("dotenv").config();
 
 const { PORT = 4000, MONGODB_URL } = process.env;
-
 const express = require("express");
-
 const app = express();
-
 const mongoose = require("mongoose");
-
 const cors = require("cors");
 const morgan = require("morgan");
 
@@ -40,16 +36,6 @@ const TestimonialsSchema = new mongoose.Schema({
 
 const Testimonials = mongoose.model("Testimonials", TestimonialsSchema); 
 
-const ReviewsSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    rating: Number,
-},
-{
-    timestamps: true
-});
-
-const Reviews = mongoose.model("Reviews", ReviewsSchema); 
 
 app.use(cors()); 
 app.use(morgan("dev")); 
@@ -92,25 +78,6 @@ app.get("/product/:id", async (req, res) => {
     }
   });
 
-
-app.put("/product/:id", async (req, res) => {
-  try {
-    res.json(
-      await Product.findByIdAndUpdate(req.params.id, req.body)
-    );
-  } catch (error) {
-    res.status(400).json(error);
-  }
-});
-
-app.delete("/product/:id", async (req, res) => {
-  try {
-    res.json(await Product.findByIdAndRemove(req.params.id));
-  } catch (error) {
-    res.status(400).json(error);
-  }
-});
-
 app.get("/testimonials", async (req, res) => {
     try {
   
@@ -132,7 +99,7 @@ app.get("/testimonials", async (req, res) => {
     }
   });
 
-  app.put("/testimonials", async (req, res) => {
+  app.put("/testimonials/:id", async (req, res) => {
     try {
       res.json(
         await Testimonials.findByIdAndUpdate(req.params.id, req.body)
@@ -142,14 +109,13 @@ app.get("/testimonials", async (req, res) => {
     }
   });
   
-  app.delete("/testimonials", async (req, res) => {
+  app.delete("/testimonials/:id", async (req, res) => {
     try {
       res.json(await Testimonials.findByIdAndRemove(req.params.id));
     } catch (error) {
       res.status(400).json(error);
     }
   });
-
 
 
 app.listen(PORT, () => console.log(`listening on PORT ${PORT}`));
